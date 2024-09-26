@@ -1,8 +1,12 @@
 export default function Menu() {
   return (
-    <>
-      <a href="">Home</a>
-      <a href="">Profile</a>
-    </>
+    <div className="flex gap-4 items-center">
+      <a href="" className="text-lg font-bold underline">
+        Home
+      </a>
+      <a href="" className="text-lg font-bold underline">
+        Profile
+      </a>
+    </div>
   );
 }

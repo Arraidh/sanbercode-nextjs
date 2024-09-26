@@ -28,9 +28,9 @@ export default function Home() {
       <div
         className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
       >
-        <Footer />
-        Testing Component
         <Header />
+        Testing Component
+        <Footer />
       </div>
     </>
   );
