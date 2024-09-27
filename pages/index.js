@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import styles from "@/styles/Home.module.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import Layout from "@/layout";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,9 +29,7 @@ export default function Home() {
       <div
         className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
       >
-        <Header />
-        Testing Component
-        <Footer />
+        <Layout>Testing Component</Layout>
       </div>
     </>
   );
