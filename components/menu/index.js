@@ -1,10 +1,10 @@
 export default function Menu() {
   return (
     <div className="flex gap-4 items-center">
-      <a href="" className="text-lg font-bold underline">
+      <a href="/" className="text-lg font-bold underline">
         Home
       </a>
-      <a href="" className="text-lg font-bold underline">
+      <a href="/profile" className="text-lg font-bold underline">
         Profile
       </a>
     </div>
