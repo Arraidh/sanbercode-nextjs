@@ -1,10 +1,7 @@
-import Head from "next/head";
-import Image from "next/image";
 import localFont from "next/font/local";
 import styles from "@/styles/Home.module.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import Layout from "@/layout";
+import dynamic from "next/dynamic";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -17,20 +14,22 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+const DynamicLayout = dynamic(() => import("@/layout"));
+
 export default function Home() {
   return (
     <>
       <div
         className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
       >
-        <Layout
+        <DynamicLayout
           metaTitle={"Next JS"}
           metaDescription={
             "Sanber code intensive Next JS Bootcamp Batch 60 covering intermediate javascript framework practical approach. Made by Kadek Ari Dharmika"
           }
         >
           Testing Component
-        </Layout>
+        </DynamicLayout>
       </div>
     </>
   );
