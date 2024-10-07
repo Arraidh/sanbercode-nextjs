@@ -7,6 +7,9 @@ export default function Menu() {
       <a href="/profile" className="text-sm font-bold ">
         Profile
       </a>
+      <a href="/chess-gm" className="text-sm font-bold ">
+        Chess GM
+      </a>
     </div>
   );
 }
