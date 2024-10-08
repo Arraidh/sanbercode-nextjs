@@ -5,7 +5,7 @@ import navIcon from "@/public/next.png";
 
 function Header() {
   return (
-    <div className="w-full flex justify-between p-4 items-center cursor-pointer bg-white rounded-lg">
+    <div className="w-full flex justify-between p-4 items-center cursor-pointer bg-slate-50 rounded-lg shadow-lg ">
       <Image
         src={navIcon}
         width={32}
