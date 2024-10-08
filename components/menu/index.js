@@ -10,6 +10,9 @@ export default function Menu() {
       <a href="/chess-gm" className="text-sm font-bold ">
         Chess GM
       </a>
+      <a href="/notes" className="text-sm font-bold ">
+        Notes
+      </a>
     </div>
   );
 }
