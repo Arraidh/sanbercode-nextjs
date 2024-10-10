@@ -1,3 +1,4 @@
+import { useMutation } from "@/hooks/useMutation";
 import {
   Alert,
   AlertDialog,
@@ -28,35 +29,28 @@ export default function CreateNoteDialog({ setUpdateNotes }) {
 
   const [createNotesValidation, setNotesValidation] = react.useState(true);
 
+  const { data, isError, mutates } = useMutation();
+
   const HandleSubmit = async () => {
     setNotesValidation(true);
     if (!createNotes.title || !createNotes.description) {
       setNotesValidation(false);
     } else {
-      try {
-        const respond = await fetch(
-          "https://service.pace-unv.cloud/api/notes",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(createNotes),
-          }
-        );
-        const result = await respond.json();
-        if (result?.success) {
-          toast({
-            title: "Notes Created",
-            description: "Your new notes has been added!",
-            status: "success",
-            duration: 9000,
-            isClosable: true,
-          });
-          onClose();
-          setUpdateNotes(result);
-        }
-      } catch (error) {}
+      const response = mutates({
+        url: "https://service.pace-unv.cloud/api/notes",
+        payload: createNotes,
+      });
+      if (!isError) {
+        toast({
+          title: "Notes Created",
+          description: "Your new notes has been added!",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        onClose();
+        setUpdateNotes(true);
+      }
     }
   };
 

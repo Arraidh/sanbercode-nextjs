@@ -11,6 +11,7 @@ import {
   Grid,
   GridItem,
   Heading,
+  Spinner,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -19,6 +20,7 @@ import react from "react";
 import CreateNoteDialog from "./create-note-dialog";
 import UpdateNoteDialog from "./update-note-dialog";
 import DeleteNoteDialog from "./delete-note-dialog";
+import { useQueries } from "@/hooks/useQueries";
 
 const DynamicLayout = dynamic(() => import("@/layout"));
 
@@ -26,17 +28,10 @@ export default function Notes() {
   const [notes, setNotes] = react.useState();
   const [updateNotes, setUpdateNotes] = react.useState();
 
-  function getAllNotes() {
-    async function getNotes() {
-      const res = await fetch("https://service.pace-unv.cloud/api/notes");
-      const jsonNotes = await res.json();
-      setNotes(jsonNotes);
-    }
-    getNotes();
-  }
-
-  react.useEffect(getAllNotes, []);
-  react.useEffect(getAllNotes, [updateNotes]);
+  const { data, isLoading } = useQueries({
+    prefixUrl: "https://service.pace-unv.cloud/api/notes",
+    updateNotes,
+  });
 
   return (
     <>
@@ -54,55 +49,63 @@ export default function Notes() {
               </Heading>
               <CreateNoteDialog setUpdateNotes={setUpdateNotes} />
             </Flex>
-            <Grid templateColumns="repeat(5, 1fr)" gap={2} w="100%">
-              {notes?.data?.map((note) => (
-                <GridItem key={note.id}>
-                  <Card maxW="sm">
-                    <CardBody>
-                      <Stack mt="6" spacing="3">
-                        <Heading size="md"> {note?.title}</Heading>
-                        <Text>{note?.description}</Text>
-                        <Divider />
-                        <div className="flex gap-2 justify-between w-full">
-                          <Stack spacing="1">
-                            {" "}
-                            <Heading as="h6" size="xs">
-                              Created:
-                            </Heading>
-                            <Text fontSize="xs">
-                              {indonesianDateFormat(note?.created_at)}
-                            </Text>
-                          </Stack>
+            {isLoading ? (
+              <>
+                <Spinner />
+              </>
+            ) : (
+              <>
+                <Grid templateColumns="repeat(5, 1fr)" gap={2} w="100%">
+                  {data?.data?.map((note) => (
+                    <GridItem key={note.id}>
+                      <Card maxW="sm">
+                        <CardBody>
+                          <Stack mt="6" spacing="3">
+                            <Heading size="md"> {note?.title}</Heading>
+                            <Text>{note?.description}</Text>
+                            <Divider />
+                            <div className="flex gap-2 justify-between w-full">
+                              <Stack spacing="1">
+                                {" "}
+                                <Heading as="h6" size="xs">
+                                  Created:
+                                </Heading>
+                                <Text fontSize="xs">
+                                  {indonesianDateFormat(note?.created_at)}
+                                </Text>
+                              </Stack>
 
-                          <Stack spacing="1" className="text-end">
-                            {" "}
-                            <Heading as="h6" size="xs">
-                              Last Updated:
-                            </Heading>
-                            <Text fontSize="xs">
-                              {indonesianDateFormat(note?.updated_at)}
-                            </Text>
+                              <Stack spacing="1" className="text-end">
+                                {" "}
+                                <Heading as="h6" size="xs">
+                                  Last Updated:
+                                </Heading>
+                                <Text fontSize="xs">
+                                  {indonesianDateFormat(note?.updated_at)}
+                                </Text>
+                              </Stack>
+                            </div>
                           </Stack>
-                        </div>
-                      </Stack>
-                    </CardBody>
-                    <Divider />
-                    <CardFooter>
-                      <ButtonGroup spacing="2" width={"100%"}>
-                        <UpdateNoteDialog
-                          setUpdateNotes={setUpdateNotes}
-                          noteData={note}
-                        />
-                        <DeleteNoteDialog
-                          setUpdateNotes={setUpdateNotes}
-                          noteData={note}
-                        />
-                      </ButtonGroup>
-                    </CardFooter>
-                  </Card>
-                </GridItem>
-              ))}
-            </Grid>
+                        </CardBody>
+                        <Divider />
+                        <CardFooter>
+                          <ButtonGroup spacing="2" width={"100%"}>
+                            <UpdateNoteDialog
+                              setUpdateNotes={setUpdateNotes}
+                              noteData={note}
+                            />
+                            <DeleteNoteDialog
+                              setUpdateNotes={setUpdateNotes}
+                              noteData={note}
+                            />
+                          </ButtonGroup>
+                        </CardFooter>
+                      </Card>
+                    </GridItem>
+                  ))}
+                </Grid>
+              </>
+            )}
           </div>
         </DynamicLayout>
       </div>
