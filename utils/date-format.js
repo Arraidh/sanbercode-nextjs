@@ -5,6 +5,5 @@ export default function indonesianDateFormat(time) {
     month: "short",
     day: "2-digit",
   }).format(tanggalSekarang);
-  console.log(formatIndonesia); // Output: DD/MM/YYYY sesuai dengan tanggalsaat ini
   return formatIndonesia;
 }

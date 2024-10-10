@@ -21,7 +21,10 @@ export default function DeleteNoteDialog({ setUpdateNotes, noteData }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = react.useRef();
 
+  const [isSubmitting, setIsSubmitting] = react.useState(false);
+
   const HandleSubmit = async () => {
+    setIsSubmitting(true);
     try {
       const respond = await fetch(
         `https://service.pace-unv.cloud/api/notes/delete/${noteData.id}`,
@@ -41,10 +44,29 @@ export default function DeleteNoteDialog({ setUpdateNotes, noteData }) {
           duration: 9000,
           isClosable: true,
         });
-        onClose();
+
         setUpdateNotes(result);
+      } else {
+        toast({
+          title: "Opps There's an error",
+          description: result?.message,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
       }
-    } catch (error) {}
+      onClose();
+      setIsSubmitting(false);
+    } catch (error) {
+      toast({
+        title: "Opps There's an error",
+        description: error.messege,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -72,7 +94,12 @@ export default function DeleteNoteDialog({ setUpdateNotes, noteData }) {
               <Button ref={cancelRef} onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme="red" ml={3} onClick={HandleSubmit}>
+              <Button
+                colorScheme="red"
+                ml={3}
+                onClick={HandleSubmit}
+                isDisabled={isSubmitting}
+              >
                 Delete
               </Button>
             </AlertDialogFooter>

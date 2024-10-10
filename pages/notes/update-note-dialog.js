@@ -27,11 +27,14 @@ export default function UpdateNoteDialog({ setUpdateNotes, noteData }) {
   });
 
   const [updateNotesValidation, setNotesValidation] = react.useState(true);
+  const [isSubmitting, setIsSubmitting] = react.useState(false);
 
   const HandleSubmit = async () => {
+    setIsSubmitting(true);
     setNotesValidation(true);
     if (!updateNotes.title || !updateNotes.description) {
       setNotesValidation(false);
+      setIsSubmitting(false);
     } else {
       try {
         const respond = await fetch(
@@ -53,10 +56,29 @@ export default function UpdateNoteDialog({ setUpdateNotes, noteData }) {
             duration: 9000,
             isClosable: true,
           });
-          onClose();
+
           setUpdateNotes(result);
+        } else {
+          toast({
+            title: "Opps There's an error",
+            description: result?.message,
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
         }
-      } catch (error) {}
+        setIsSubmitting(false);
+        onClose();
+      } catch (error) {
+        toast({
+          title: "Opps There's an error",
+          description: error.messege,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -89,6 +111,7 @@ export default function UpdateNoteDialog({ setUpdateNotes, noteData }) {
                       title: event.target.value,
                     })
                   }
+                  isDisabled={isSubmitting}
                 />
                 <Textarea
                   placeholder="Note Description"
@@ -99,6 +122,7 @@ export default function UpdateNoteDialog({ setUpdateNotes, noteData }) {
                       description: event.target.value,
                     })
                   }
+                  isDisabled={isSubmitting}
                 />
                 {updateNotesValidation ? (
                   ""
@@ -115,7 +139,12 @@ export default function UpdateNoteDialog({ setUpdateNotes, noteData }) {
               <Button ref={cancelRef} onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme="blue" onClick={HandleSubmit} ml={3}>
+              <Button
+                colorScheme="blue"
+                onClick={HandleSubmit}
+                ml={3}
+                isDisabled={isSubmitting}
+              >
                 Update
               </Button>
             </AlertDialogFooter>
