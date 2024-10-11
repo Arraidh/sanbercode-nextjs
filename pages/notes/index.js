@@ -21,17 +21,24 @@ import CreateNoteDialog from "./create-note-dialog";
 import UpdateNoteDialog from "./update-note-dialog";
 import DeleteNoteDialog from "./delete-note-dialog";
 import { useQueries } from "@/hooks/useQueries";
+import fetcher from "@/utils/fetcher";
+import useSWR from "swr";
 
 const DynamicLayout = dynamic(() => import("@/layout"));
 
 export default function Notes() {
-  const [notes, setNotes] = react.useState();
+  const { data, error, isLoading } = useSWR(
+    "https://service.pace-unv.cloud/api/notes",
+    fetcher,
+    { revalidateOnFocus: true }
+  );
+
   const [updateNotes, setUpdateNotes] = react.useState();
 
-  const { data, isLoading } = useQueries({
-    prefixUrl: "https://service.pace-unv.cloud/api/notes",
-    updateNotes,
-  });
+  // const { data, isLoading } = useQueries({
+  //   prefixUrl: "https://service.pace-unv.cloud/api/notes",
+  //   updateNotes,
+  // });
 
   return (
     <>
