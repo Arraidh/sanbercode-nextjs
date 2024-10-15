@@ -8,7 +8,7 @@ export const useMutation = () => {
   });
 
   const mutates = react.useCallback(
-    async ({ url = "", method = "POST", payload = {} }) => {
+    async ({ url = "", method = "POST", payload = {}, headers = {} }) => {
       setData({
         ...data,
         isLoading: true,
@@ -18,6 +18,7 @@ export const useMutation = () => {
           method,
           headers: {
             "Content-Type": "application/json",
+            ...headers,
           },
           body: JSON.stringify(payload),
         });

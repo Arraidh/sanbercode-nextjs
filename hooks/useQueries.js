@@ -1,6 +1,10 @@
 import react from "react";
 
-export const useQueries = ({ prefixUrl = "", updateNotes = false }) => {
+export const useQueries = ({
+  prefixUrl = "",
+  updateNotes = false,
+  headers = {},
+}) => {
   const [data, setData] = react.useState({
     data: null,
     isLoading: false,
@@ -8,13 +12,13 @@ export const useQueries = ({ prefixUrl = "", updateNotes = false }) => {
   });
 
   const fetchingData = react.useCallback(
-    async ({ url = "", method = "GET" }) => {
+    async ({ url = "", method = "GET", headers = {} }) => {
       setData({
         ...data,
         isLoading: true,
       });
       try {
-        const response = await fetch(url, { method });
+        const response = await fetch(url, { method, headers });
         const results = await response.json();
 
         setData({
@@ -34,10 +38,9 @@ export const useQueries = ({ prefixUrl = "", updateNotes = false }) => {
   );
 
   react.useEffect(() => {
-    if (prefixUrl) fetchingData({ url: prefixUrl });
-  }, []);
-  react.useEffect(() => {
-    if (prefixUrl) fetchingData({ url: prefixUrl });
+    if (prefixUrl) {
+      fetchingData({ url: prefixUrl, headers: headers });
+    }
   }, [updateNotes]);
 
   return { ...data };

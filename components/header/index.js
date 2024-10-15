@@ -1,7 +1,7 @@
-import Menu from "../menu";
 import { withAuth } from "../with-auth";
 import Image from "next/image";
 import navIcon from "@/public/next.png";
+import MenuNavbar from "../menu";
 
 function Header() {
   return (
@@ -15,7 +15,7 @@ function Header() {
         placeholder="blur"
       />
       {/* <h1 className="text-xl">Sanbercode Next JS</h1> */}
-      <Menu />
+      <MenuNavbar />
     </div>
   );
 }
