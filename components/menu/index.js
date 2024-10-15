@@ -4,14 +4,18 @@ import { useQueries } from "@/hooks/useQueries";
 import Cookies from "js-cookie";
 import { useMutation } from "@/hooks/useMutation";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import { UserContext } from "@/context/userContext";
 
 export default function MenuNavbar() {
   const router = useRouter();
   const { mutates } = useMutation();
-  const { data } = useQueries({
-    prefixUrl: "https://service.pace-unv.cloud/api/user/me",
-    headers: { Authorization: `Bearer ${Cookies.get("user_token")}` },
-  });
+
+  const userData = useContext(UserContext);
+  // const { data } = useQueries({
+  //   prefixUrl: "https://service.pace-unv.cloud/api/user/me",
+  //   headers: { Authorization: `Bearer ${Cookies.get("user_token")}` },
+  // });
 
   const handleLogout = async () => {
     const response = await mutates({
@@ -27,7 +31,6 @@ export default function MenuNavbar() {
     }
   };
 
-  console.log(data);
   return (
     <div className="flex gap-4 items-center text-black">
       <a href="/" className="text-sm font-bold ">
@@ -47,7 +50,7 @@ export default function MenuNavbar() {
       </a>
       <Menu>
         <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-          {data?.data.name}
+          {userData?.name}
         </MenuButton>
         <MenuList>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
